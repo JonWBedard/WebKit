@@ -4638,7 +4638,7 @@ class ValidateSquashed(shell.ShellCommand):
 
     def getResultSummary(self):
         if self.results == SKIPPED:
-            return {'step': 'Patches are always squashed'}
+            return super(ValidateSquashed, self).getResultSummary()
         elif self.results == SUCCESS:
             return {'step': 'Verified branch is squashed'}
         return {'step': 'Can only land squashed branches'}
@@ -4715,7 +4715,7 @@ class AddReviewerToCommitMessage(shell.ShellCommand, AddReviewerMixin):
 
     def getResultSummary(self):
         if self.results == SKIPPED:
-            return {'step': 'No reviewer defined' if self.getProperty('github.number') else 'Patches have no commit message'}
+            return super(AddReviewerToCommitMessage, self).getResultSummary()
         elif self.results == SUCCESS:
             return {'step': f'Reviewed by {self.reviewers()}'}
         return {'step': 'Failed to apply reviewers'}
@@ -4763,7 +4763,7 @@ class AddReviewerToChangeLog(steps.ShellSequence, ShellMixin, AddReviewerMixin):
 
     def getResultSummary(self):
         if self.results == SKIPPED:
-            return {'step': 'No reviewer defined' if self.getProperty('github.number') else 'Patches are edited upon application'}
+            return super(AddReviewerToChangeLog, self).getResultSummary()
         elif self.results == SUCCESS:
             return {'step': f'Reviewed by {self.reviewers()}'}
         return {'step': 'Failed to add reviewers to ChangeLogs'}
@@ -4794,6 +4794,8 @@ class ValidateCommitMessage(shell.ShellCommand):
         return super(ValidateCommitMessage, self).start()
 
     def getResultSummary(self):
+        if self.results == SKIPPED:
+            return super(ValidateCommitMessage, self).getResultSummary()
         return {'step': self.summary}
 
     def evaluateCommand(self, cmd):
@@ -4848,7 +4850,7 @@ class Canonicalize(steps.ShellSequence, ShellMixin):
 
     def getResultSummary(self):
         if self.results == SKIPPED:
-            return {'step': 'Cannot canonicalize patches'}
+            return super(Canonicalize, self).getResultSummary()
         if self.results != SUCCESS:
             return {'step': 'Failed to canonicalize commit'}
         return {'step': 'Canonicalized commit'}
@@ -4880,7 +4882,7 @@ class PushPullRequestBranch(shell.ShellCommand):
 
     def getResultSummary(self):
         if self.results == SKIPPED:
-            return {'step': 'No pull request branch to push to'}
+            return super(PushPullRequestBranch, self).getResultSummary()
         if self.results != SUCCESS:
             return {'step': 'Failed to push to pull request branch'}
         return {'step': 'Pushed to pull request branch'}
@@ -4927,7 +4929,7 @@ class UpdatePullRequest(shell.ShellCommand, GitHubMixin):
 
     def getResultSummary(self):
         if self.results == SKIPPED:
-            return {'step': 'No pull request to update'}
+            return super(UpdatePullRequest, self).getResultSummary()
         if self.results != SUCCESS:
             return {'step': 'Failed to update pull request'}
         return {'step': 'Updated pull request'}
