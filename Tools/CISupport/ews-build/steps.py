@@ -4863,7 +4863,7 @@ class Canonicalize(steps.ShellSequence, ShellMixin):
                 ['git', 'branch', '-f', base_ref, head_ref],
                 ['git', 'checkout', base_ref],
             ]
-        commands.append(['python3', 'Tools/Scripts/git-webkit', 'canonicalize', '-n', '1'])
+        commands.append(['python3', 'Tools/Scripts/git-webkit', 'canonicalize', '-n', '1' if self.rebase_enabled else '3'])
 
         for command in commands:
             self.commands.append(util.ShellArg(command=command, logname='stdio', haltOnFailure=True))
@@ -4871,10 +4871,11 @@ class Canonicalize(steps.ShellSequence, ShellMixin):
         return super(Canonicalize, self).run()
 
     def getResultSummary(self):
+        pluralized = "commit" if self.rebase_enabled else "commits"
         if self.results == SUCCESS:
-            return {'step': 'Canonicalized commit'}
+            return {'step': f'Canonicalized {pluralized}'}
         if self.results == FAILURE:
-            return {'step': 'Failed to canonicalize commit'}
+            return {'step': f'Failed to canonicalize {pluralized}'}
         return super(Canonicalize, self).getResultSummary()
 
     def doStepIf(self, step):
