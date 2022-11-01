@@ -1,4 +1,4 @@
-# Copyright (C) 2021 Apple Inc. All rights reserved.
+# Copyright (C) 2021-2022 Apple Inc. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -27,12 +27,8 @@ import multiprocessing
 import signal
 import sys
 
-if sys.version_info < (3, 0):
-    import Queue
-else:
-    import queue as Queue
-
 from webkitcorepy import OutputCapture, Timeout, log
+from webkitcorepy.multiprocessing_utils import Queue
 
 
 class _Message(object):
@@ -136,11 +132,11 @@ class _ChildException(_Message):
 
 class _BiDirectionalQueue(object):
     def __init__(self, outgoing=None, incoming=None):
-        self.outgoing = outgoing or multiprocessing.Queue()
-        self.incoming = incoming or multiprocessing.Queue()
+        self.outgoing = outgoing or Queue()
+        self.incoming = incoming or Queue()
 
     def send(self, object):
-        if self.outgoing._closed:
+        if self.outgoing.closed:
             sys.stderr.write('Cannot send message to closed queue\n')
             return False
         return self.outgoing.put(object)
@@ -162,8 +158,6 @@ class _BiDirectionalQueue(object):
         with OutputCapture():
             self.outgoing.close()
             self.incoming.close()
-            self.outgoing.join_thread()
-            self.incoming.join_thread()
 
 
 class _DummyQueue(object):
