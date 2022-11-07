@@ -561,8 +561,10 @@ class Sharder(object):
             tests_by_dir[directory].append(test_input)
 
         for directory, test_inputs in iteritems(tests_by_dir):
-            shard = TestShard(directory, test_inputs)
-            shards.append(shard)
+            while test_inputs:
+                shard = TestShard(directory, test_inputs[:100])
+                shards.append(shard)
+                test_inputs = test_inputs[100:]
 
         # Sort the shards by directory name.
         shards.sort(key=lambda shard: shard.name)
