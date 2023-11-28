@@ -491,20 +491,20 @@ CommitDate: {time_c}
             self.assertEqual(repo.rebase(target='main', base='main', head='branch-a', recommit=False), 0)
             self.assertEqual(str(repo.commit(branch='branch-a')), '5.2@branch-a')
 
-    def test_diff_lines(self):
+    def test_diff(self):
         with mocks.local.Git(self.path), OutputCapture():
             repo = local.Git(self.path)
             self.assertEqual(
                 ['--- a/ChangeLog', '+++ b/ChangeLog', '@@ -1,0 +1,0 @@', '+ Patch Series'],
-                list(repo.diff_lines(base='bae5d1e90999d4f916a8a15810ccfa43f37a2fd6'))
+                list(repo.diff(base='bae5d1e90999d4f916a8a15810ccfa43f37a2fd6'))
             )
 
-    def test_diff_lines_identifier(self):
-        with mocks.local.Git(self.path), OutputCapture():
+    def test_diff_identifier(self):
+        with mocks.local.Git(self.path):
             repo = local.Git(self.path)
             self.assertEqual(
                 ['--- a/ChangeLog', '+++ b/ChangeLog', '@@ -1,0 +1,0 @@', '+ 8th commit'],
-                list(repo.diff_lines(base='3@main', head='4@main'))
+                list(repo.diff(base='3@main', head='4@main'))
             )
 
     def test_pull(self):

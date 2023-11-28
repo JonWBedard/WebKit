@@ -135,3 +135,7 @@ class Scm(ScmBase):
 
     def pull(self):
         raise NotImplementedError()
+
+    def diff(self, head='HEAD', base=None, include_log=False):
+        raise NotImplementedError()
+
