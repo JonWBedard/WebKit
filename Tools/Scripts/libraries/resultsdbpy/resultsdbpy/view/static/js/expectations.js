@@ -56,11 +56,14 @@ class Expectations
 
     static unexpectedResults(results, expectations)
     {
+        let result = 'WARNING';
         let r = results.split('.');
         expectations.split(' ').forEach(expectation => {
             const i = r.indexOf(expectation);
-            if (i > -1)
+            if (i > -1) {
+                result = 'PASS';
                 r.splice(i, 1);
+            }
             if (expectation === 'FAIL')
                 ['TEXT', 'AUDIO', 'IMAGE'].forEach(expectation => {
                     const i = r.indexOf(expectation);
@@ -68,7 +71,6 @@ class Expectations
                         r.splice(i, 1);
                 });
         });
-        let result = 'PASS';
         r.forEach(candidate => {
             if (Expectations.stringToStateId(candidate) < Expectations.stringToStateId(result))
                 result = candidate;
