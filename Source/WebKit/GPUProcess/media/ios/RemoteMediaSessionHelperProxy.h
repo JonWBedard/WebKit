@@ -60,7 +60,7 @@ private:
     // Messages
     void startMonitoringWirelessRoutes();
     void stopMonitoringWirelessRoutes();
-    void providePresentingApplicationPID(int, WebCore::MediaSessionHelper::ShouldOverride);
+    void providePresentingApplicationPID(int);
 
     // MediaSessionHelperClient
     void applicationWillEnterForeground(SuspendedUnderLock) final;

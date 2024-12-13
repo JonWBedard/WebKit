@@ -79,10 +79,10 @@ void RemoteMediaSessionHelperProxy::stopMonitoringWirelessRoutes()
     MediaSessionHelper::sharedHelper().stopMonitoringWirelessRoutes();
 }
 
-void RemoteMediaSessionHelperProxy::providePresentingApplicationPID(int pid, MediaSessionHelper::ShouldOverride shouldOverride)
+void RemoteMediaSessionHelperProxy::providePresentingApplicationPID(int pid)
 {
     m_presentingApplicationPID = pid;
-    MediaSessionHelper::sharedHelper().providePresentingApplicationPID(pid, shouldOverride);
+    MediaSessionHelper::sharedHelper().providePresentingApplicationPID(pid);
 }
 
 void RemoteMediaSessionHelperProxy::overridePresentingApplicationPIDIfNeeded()

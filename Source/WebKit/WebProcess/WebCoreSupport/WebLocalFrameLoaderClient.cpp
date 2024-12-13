@@ -1898,7 +1898,7 @@ void WebLocalFrameLoaderClient::sendH2Ping(const URL& url, CompletionHandler<voi
     parameters.webPageProxyID = webPage->webPageProxyIdentifier();
     parameters.webPageID = webPage->identifier();
     parameters.webFrameID = m_frame->frameID();
-    parameters.parentPID = legacyPresentingApplicationPID();
+    parameters.parentPID = presentingApplicationPID();
 #if HAVE(AUDIT_TOKEN)
     parameters.networkProcessAuditToken = WebProcess::singleton().ensureNetworkProcessConnection().networkProcessAuditToken();
 #endif

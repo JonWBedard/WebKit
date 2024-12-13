@@ -30,28 +30,13 @@
 
 namespace WebKit {
 
-static std::array<unsigned, 8> invalidAuditToken()
-{
-    static std::array<unsigned, 8> invalidAuditToken;
-    invalidAuditToken.fill(std::numeric_limits<unsigned>::max());
-    return invalidAuditToken;
-}
-
 struct CoreIPCAuditToken {
-    CoreIPCAuditToken()
-        : CoreIPCAuditToken { invalidAuditToken() }
-    {
-    }
-
     CoreIPCAuditToken(audit_token_t input)
     {
         memcpy(token.data(), &input, sizeof(token));
     }
-
-    CoreIPCAuditToken(std::array<unsigned, 8> token)
-        : token { WTFMove(token) }
-    {
-    }
+    CoreIPCAuditToken(std::array<int, 8> token)
+        : token(token) { }
 
     audit_token_t auditToken() const
     {
@@ -60,7 +45,7 @@ struct CoreIPCAuditToken {
         return result;
     }
 
-    std::array<unsigned, 8> token;
+    std::array<int, 8> token;
     static_assert(sizeof(token) == sizeof(audit_token_t));
 };
 

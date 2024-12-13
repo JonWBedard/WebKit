@@ -530,10 +530,6 @@ public:
     void registerServiceWorkerClients(CompletionHandler<void()>&&);
     void resetHasRegisteredServiceWorkerClients() { m_hasRegisteredServiceWorkerClients = false; }
 
-#if HAVE(AUDIT_TOKEN)
-    HashMap<WebCore::PageIdentifier, CoreIPCAuditToken> presentingApplicationAuditTokens() const;
-#endif
-
 private:
     Type type() const final { return Type::WebContent; }
 

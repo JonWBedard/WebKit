@@ -180,6 +180,8 @@ GPUProcessProxy::GPUProcessProxy()
 #endif
 #endif // ENABLE(MEDIA_STREAM)
 
+    parameters.parentPID = getCurrentProcessID();
+
 #if USE(SANDBOX_EXTENSIONS_FOR_CACHE_AND_TEMP_DIRECTORY_ACCESS)
     parameters.containerCachesDirectory = resolveAndCreateReadWriteDirectoryForSandboxExtension(gpuProcessCachesDirectory());
     auto containerTemporaryDirectory = WebsiteDataStore::defaultResolvedContainerTemporaryDirectory();
@@ -903,13 +905,6 @@ void GPUProcessProxy::statusBarWasTapped(CompletionHandler<void()>&& completionH
 }
 #endif
 #endif // ENABLE(MEDIA_STREAM)
-
-#if HAVE(AUDIT_TOKEN)
-void GPUProcessProxy::setPresentingApplicationAuditToken(WebCore::ProcessIdentifier processIdentifier, WebCore::PageIdentifier pageIdentifier, std::optional<CoreIPCAuditToken> auditToken)
-{
-    send(Messages::GPUProcess::SetPresentingApplicationAuditToken(processIdentifier, pageIdentifier, auditToken), 0);
-}
-#endif
 
 } // namespace WebKit
 

@@ -347,7 +347,7 @@ void NetworkProcess::initializeNetworkProcess(NetworkProcessCreationParameters&&
 
     updateStorageAccessPromptQuirks(WTFMove(parameters.storageAccessPromptQuirksData));
 
-    RELEASE_LOG(Process, "%p - NetworkProcess::initializeNetworkProcess: Presenting processPID=%d", this, legacyPresentingApplicationPID());
+    RELEASE_LOG(Process, "%p - NetworkProcess::initializeNetworkProcess: Presenting processPID=%d", this, presentingApplicationPID());
 }
 
 void NetworkProcess::initializeConnection(IPC::Connection* connection)

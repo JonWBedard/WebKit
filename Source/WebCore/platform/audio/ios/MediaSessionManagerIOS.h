@@ -54,6 +54,7 @@ public:
 
     bool hasWirelessTargetsAvailable() override;
     bool isMonitoringWirelessTargets() const override;
+    static WEBCORE_EXPORT void providePresentingApplicationPID();
 
     USING_CAN_MAKE_WEAKPTR(MediaSessionHelperClient);
 
@@ -67,8 +68,7 @@ private:
 #endif
 
     void configureWirelessTargetMonitoring() final;
-    void providePresentingApplicationPIDIfNecessary(ProcessID) final;
-    void updatePresentingApplicationPIDIfNecessary(ProcessID) final;
+    void providePresentingApplicationPIDIfNecessary() final;
     bool sessionWillBeginPlayback(PlatformMediaSession&) final;
     void sessionWillEndPlayback(PlatformMediaSession&, DelayCallingUpdateNowPlaying) final;
 

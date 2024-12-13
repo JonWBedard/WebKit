@@ -30,7 +30,7 @@
     bool ignoreInvalidMessageForTesting;
 #endif
 #if HAVE(AUDIT_TOKEN)
-    HashMap<WebCore::PageIdentifier, WebKit::CoreIPCAuditToken> presentingApplicationAuditTokens;
+    std::optional<WebKit::CoreIPCAuditToken> presentingApplicationAuditToken;
 #endif
 #if PLATFORM(COCOA)
     String applicationBundleIdentifier;

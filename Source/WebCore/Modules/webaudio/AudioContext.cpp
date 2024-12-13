@@ -681,16 +681,6 @@ void AudioContext::isActiveNowPlayingSessionChanged()
     }
 }
 
-ProcessID AudioContext::presentingApplicationPID() const
-{
-    if (RefPtr document = this->document()) {
-        if (RefPtr page = document->protectedPage())
-            return page->presentingApplicationPID();
-    }
-
-    return { };
-}
-
 #if !RELEASE_LOG_DISABLED
 const Logger& AudioContext::logger() const
 {

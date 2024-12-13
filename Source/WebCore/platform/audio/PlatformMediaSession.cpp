@@ -34,7 +34,6 @@
 #include "NowPlayingInfo.h"
 #include "PlatformMediaSessionManager.h"
 #include <wtf/MediaTime.h>
-#include <wtf/RuntimeApplicationChecks.h>
 #include <wtf/SetForScope.h>
 #include <wtf/TZoneMallocInlines.h>
 #include <wtf/text/MakeString.h>
@@ -494,11 +493,6 @@ void PlatformMediaSession::setActiveNowPlayingSession(bool isActiveNowPlayingSes
 
     m_isActiveNowPlayingSession = isActiveNowPlayingSession;
     client().isActiveNowPlayingSessionChanged();
-}
-
-ProcessID PlatformMediaSession::presentingApplicationPID() const
-{
-    return client().presentingApplicationPID();
 }
 
 #if !RELEASE_LOG_DISABLED

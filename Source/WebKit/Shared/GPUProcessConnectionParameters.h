@@ -33,7 +33,6 @@
 
 #if HAVE(AUDIT_TOKEN)
 #include "CoreIPCAuditToken.h"
-#include <WebCore/PageIdentifier.h>
 #endif
 
 namespace WebKit {
@@ -46,7 +45,7 @@ struct GPUProcessConnectionParameters {
     bool ignoreInvalidMessageForTesting { false };
 #endif
 #if HAVE(AUDIT_TOKEN)
-    HashMap<WebCore::PageIdentifier, CoreIPCAuditToken> presentingApplicationAuditTokens;
+    std::optional<CoreIPCAuditToken> presentingApplicationAuditToken;
 #endif
 #if PLATFORM(COCOA)
     String applicationBundleIdentifier;

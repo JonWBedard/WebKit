@@ -792,9 +792,6 @@ WebPageProxy::WebPageProxy(PageClient& pageClient, WebProcessProxy& process, Ref
 #if ENABLE(GAMEPAD)
     , m_recentGamepadAccessHysteresis([this](PAL::HysteresisState state) { recentGamepadAccessStateChanged(state); }, gamepadsRecentlyAccessedThreshold)
 #endif
-#if HAVE(AUDIT_TOKEN)
-    , m_presentingApplicationAuditToken(process.protectedProcessPool()->configuration().presentingApplicationProcessToken())
-#endif
     , m_pageForTesting(WebPageProxyTesting::create(*this))
 {
     WEBPAGEPROXY_RELEASE_LOG(Loading, "constructor:");
@@ -874,11 +871,6 @@ WebPageProxy::WebPageProxy(PageClient& pageClient, WebProcessProxy& process, Ref
     if (protectedPreferences()->scriptTelemetryEnabled())
         process.protectedProcessPool()->observeScriptTelemetryUpdatesIfNeeded();
 #endif // ENABLE(ADVANCED_PRIVACY_PROTECTIONS)
-
-#if HAVE(AUDIT_TOKEN)
-    if (RefPtr gpuProcess = GPUProcessProxy::singletonIfCreated())
-        gpuProcess->setPresentingApplicationAuditToken(process.coreProcessIdentifier(), m_webPageID, m_presentingApplicationAuditToken);
-#endif
 }
 
 WebPageProxy::~WebPageProxy()
@@ -925,11 +917,6 @@ WebPageProxy::~WebPageProxy()
 #if ENABLE(MEDIA_SESSION_COORDINATOR) && HAVE(GROUP_ACTIVITIES)
     if (preferences->mediaSessionCoordinatorEnabled())
         GroupActivitiesSessionNotifier::singleton().removeWebPage(*this);
-#endif
-
-#if HAVE(AUDIT_TOKEN)
-    if (RefPtr gpuProcess = GPUProcessProxy::singletonIfCreated())
-        gpuProcess->setPresentingApplicationAuditToken(m_legacyMainFrameProcess->coreProcessIdentifier(), m_webPageID, std::nullopt);
 #endif
 }
 
@@ -11393,10 +11380,6 @@ WebPageCreationParameters WebPageProxy::creationParameters(WebProcessProxy& proc
 #endif
 #endif
 
-#if HAVE(AUDIT_TOKEN)
-    parameters.presentingApplicationAuditToken = presentingApplicationAuditToken();
-#endif
-
     return parameters;
 }
 
@@ -15680,24 +15663,6 @@ void WebPageProxy::restoreSessionStorage(HashMap<WebCore::ClientOrigin, HashMap<
 {
     protectedWebsiteDataStore()->protectedNetworkProcess()->sendWithAsyncReply(Messages::NetworkProcess::RestoreSessionStorage(sessionID(), identifier(), WTFMove(sessionStorage)), WTFMove(completionHandler));
 }
-
-#if HAVE(AUDIT_TOKEN)
-const std::optional<audit_token_t>& WebPageProxy::presentingApplicationAuditToken() const
-{
-    return m_presentingApplicationAuditToken;
-}
-
-void WebPageProxy::setPresentingApplicationAuditToken(const audit_token_t& presentingApplicationAuditToken)
-{
-    m_presentingApplicationAuditToken = presentingApplicationAuditToken;
-
-    if (hasRunningProcess())
-        send(Messages::WebPage::SetPresentingApplicationAuditToken(presentingApplicationAuditToken));
-
-    if (RefPtr gpuProcess = GPUProcessProxy::singletonIfCreated())
-        gpuProcess->setPresentingApplicationAuditToken(protectedLegacyMainFrameProcess()->coreProcessIdentifier(), m_webPageID, presentingApplicationAuditToken);
-}
-#endif
 
 } // namespace WebKit
 

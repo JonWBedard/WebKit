@@ -56,7 +56,7 @@
     // We are setting the presenter ID of the WKAccessibilityPDFDocumentObject to the hosting application's PID.
     // This way VoiceOver can set AX observers on all the PDF AX nodes which are descendant of this element.
     if ([self respondsToSelector:@selector(accessibilitySetPresenterProcessIdentifier:)])
-        [(id)self accessibilitySetPresenterProcessIdentifier:legacyPresentingApplicationPID()];
+        [(id)self accessibilitySetPresenterProcessIdentifier:presentingApplicationPID()];
     return self;
 }
 

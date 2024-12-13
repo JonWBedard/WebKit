@@ -139,9 +139,7 @@ void UserMediaRequest::start()
         break;
     }
 
-    ASSERT(document.page());
-    if (RefPtr page = document.protectedPage())
-        PlatformMediaSessionManager::singleton().prepareToSendUserMediaPermissionRequestForPage(*page);
+    PlatformMediaSessionManager::singleton().prepareToSendUserMediaPermissionRequest();
     controller->requestUserMediaAccess(*this);
 }
 

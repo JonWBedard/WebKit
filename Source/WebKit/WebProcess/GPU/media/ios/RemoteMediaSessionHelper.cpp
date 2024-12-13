@@ -73,7 +73,8 @@ void RemoteMediaSessionHelper::stopMonitoringWirelessRoutesInternal()
 
 void RemoteMediaSessionHelper::providePresentingApplicationPID(int pid, ShouldOverride shouldOverride)
 {
-    ensureConnection().send(Messages::RemoteMediaSessionHelperProxy::ProvidePresentingApplicationPID(pid, shouldOverride), { });
+    ASSERT_UNUSED(shouldOverride, shouldOverride == ShouldOverride::No);
+    ensureConnection().send(Messages::RemoteMediaSessionHelperProxy::ProvidePresentingApplicationPID(pid), { });
 }
 
 void RemoteMediaSessionHelper::activeVideoRouteDidChange(SupportsAirPlayVideo supportsAirPlayVideo, MediaPlaybackTargetContextSerialized&& targetContext)

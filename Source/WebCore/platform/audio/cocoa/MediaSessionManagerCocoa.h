@@ -60,7 +60,7 @@ public:
     bool registeredAsNowPlayingApplication() const final { return m_registeredAsNowPlayingApplication; }
     bool haveEverRegisteredAsNowPlayingApplication() const final { return m_haveEverRegisteredAsNowPlayingApplication; }
 
-    void prepareToSendUserMediaPermissionRequestForPage(Page&) final;
+    void prepareToSendUserMediaPermissionRequest() final;
 
     std::optional<NowPlayingInfo> nowPlayingInfo() const final { return m_nowPlayingInfo; }
     static WEBCORE_EXPORT void clearNowPlayingInfo();
@@ -90,7 +90,7 @@ protected:
     void clientCharacteristicsChanged(PlatformMediaSession&, bool) final;
     void sessionCanProduceAudioChanged() final;
 
-    virtual void providePresentingApplicationPIDIfNecessary(ProcessID) { }
+    virtual void providePresentingApplicationPIDIfNecessary() { }
 
     WeakPtr<PlatformMediaSession> nowPlayingEligibleSession();
 

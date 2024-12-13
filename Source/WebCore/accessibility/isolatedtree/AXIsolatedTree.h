@@ -521,7 +521,7 @@ private:
 
     void objectChangedIgnoredState(const AccessibilityObject&);
 
-    const ProcessID m_processID { legacyPresentingApplicationPID() };
+    const ProcessID m_processID { presentingApplicationPID() };
     unsigned m_maxTreeDepth { 0 };
     WeakPtr<AXObjectCache> m_axObjectCache;
     OptionSet<ActivityState> m_pageActivityState;

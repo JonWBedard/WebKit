@@ -35,7 +35,6 @@
 #import "MediaPlayer.h"
 #import "MediaStrategy.h"
 #import "NowPlayingInfo.h"
-#import "Page.h"
 #import "PlatformMediaSession.h"
 #import "PlatformStrategies.h"
 #import "SharedBuffer.h"
@@ -239,9 +238,9 @@ void MediaSessionManagerCocoa::beginInterruption(PlatformMediaSession::Interrupt
     PlatformMediaSessionManager::beginInterruption(type);
 }
 
-void MediaSessionManagerCocoa::prepareToSendUserMediaPermissionRequestForPage(Page& page)
+void MediaSessionManagerCocoa::prepareToSendUserMediaPermissionRequest()
 {
-    providePresentingApplicationPIDIfNecessary(page.presentingApplicationPID());
+    providePresentingApplicationPIDIfNecessary();
 }
 
 String MediaSessionManagerCocoa::audioTimePitchAlgorithmForMediaPlayerPitchCorrectionAlgorithm(MediaPlayer::PitchCorrectionAlgorithm pitchCorrectionAlgorithm, bool preservesPitch, double rate)
@@ -527,7 +526,7 @@ void MediaSessionManagerCocoa::updateNowPlayingInfo()
     }
     if (!m_registeredAsNowPlayingApplication) {
         m_registeredAsNowPlayingApplication = true;
-        providePresentingApplicationPIDIfNecessary(session->presentingApplicationPID());
+        providePresentingApplicationPIDIfNecessary();
     }
 
     updateActiveNowPlayingSession(session);
