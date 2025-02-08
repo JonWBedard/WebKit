@@ -2118,7 +2118,7 @@ static ContainerNode* parentOrShadowHostOrFrameOwner(const Node* node)
 static void showSubTreeAcrossFrame(const Node* node, const Node* markedNode, const String& indent)
 {
     if (node == markedNode)
-        SAFE_FPRINTF(stderr, "*");
+        fputs("*", stderr);
     SAFE_FPRINTF(stderr, "%s\n", indent.utf8());
     node->showNode();
     if (!node->isShadowRoot()) {

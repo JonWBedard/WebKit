@@ -723,7 +723,7 @@ void VisibleSelection::debugPosition() const
     fprintf(stderr, "VisibleSelection ===============\n");
 
     if (!m_start.anchorNode())
-        SAFE_FPRINTF(stderr, "pos:   null");
+        fputs("pos:   null", stderr);
     else if (m_start == m_end) {
         SAFE_FPRINTF(stderr, "pos:   %s ", m_start.anchorNode()->nodeName().utf8());
         m_start.showAnchorTypeAndOffset();
@@ -748,9 +748,9 @@ void VisibleSelection::showTreeForThis() const
 {
     if (RefPtr startAnchorNode = start().anchorNode()) {
         startAnchorNode->showTreeAndMark(startAnchorNode.get(), "S"_s, end().protectedAnchorNode().get(), "E"_s);
-        SAFE_FPRINTF(stderr, "start: ");
+        fputs("start: ", stderr);
         start().showAnchorTypeAndOffset();
-        SAFE_FPRINTF(stderr, "end: ");
+        fputs("end: ", stderr);
         end().showAnchorTypeAndOffset();
     }
 }

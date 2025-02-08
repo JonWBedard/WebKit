@@ -149,7 +149,7 @@ ObjcValue convertValueToObjcValue(JSGlobalObject* lexicalGlobalObject, JSValue v
             result.doubleValue = (double)d;
             break;
         case ObjcVoidType:
-            zeroBytes(result);
+            bzero(&result, sizeof(ObjcValue));
             break;
 
         case ObjcInvalidType:

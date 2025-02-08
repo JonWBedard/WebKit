@@ -622,9 +622,7 @@
 #if COMPILER(CLANG)
 #define WTF_ALLOW_UNSAFE_BUFFER_USAGE_BEGIN \
     _Pragma("clang diagnostic push") \
-    _Pragma("clang diagnostic ignored \"-Wunknown-warning-option\"") \
-    _Pragma("clang diagnostic ignored \"-Wunsafe-buffer-usage\"") \
-    _Pragma("clang diagnostic ignored \"-Wunsafe-buffer-usage-in-libc-call\"")
+    _Pragma("clang diagnostic ignored \"-Wunsafe-buffer-usage\"")
 
 #define WTF_ALLOW_UNSAFE_BUFFER_USAGE_END \
     _Pragma("clang diagnostic pop")
