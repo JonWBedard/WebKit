@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <body>
-<script src="../../resources/js-test-pre.js"></script>
-<script src="../../editing/editing.js"></script>
+<script src="../../../resources/js-test-pre.js"></script>
+<script src="../../../editing/editing.js"></script>
 <div id="div" contenteditable="true"></div>
 <script>
 description('This tests for a bug when moving the caret backward through '
@@ -30,5 +30,5 @@ moveSelectionBackwardByCharacterCommand();
 if (window.internals)
     shouldBecomeEqual("internals.hasSpellingMarker(42, 3)", "true", finishJSTest);
 </script>
-<script src="../../resources/js-test-post.js"></script>
+<script src="../../../resources/js-test-post.js"></script>
 </html>

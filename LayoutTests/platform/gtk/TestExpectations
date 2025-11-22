@@ -516,11 +516,7 @@ webkit.org/b/130464 fast/canvas/canvas-path-addPath.html
 # Needs grammar checking implementation.
 Bug(GTK) editing/spelling/grammar.html [ Skip ]
 Bug(GTK) editing/spelling/grammar-edit-word.html [ Skip ]
-Bug(GTK) editing/spelling/grammar-markers.html [ Skip ]
-Bug(GTK) editing/spelling/grammar-markers-hidpi.html [ Skip ]
 Bug(GTK) editing/spelling/grammar-paste.html [ Skip ]
-Bug(GTK) editing/spelling/inline-spelling-markers.html [ Skip ]
-Bug(GTK) editing/spelling/inline-spelling-markers-hidpi.html [ Skip ]
 Bug(GTK) editing/spelling/markers.html [ Skip ]
 
 # Requires ENABLE(MEDIA_CAPTURE)
@@ -1041,11 +1037,6 @@ webkit.org/b/147229 inspector/css/modify-rule-selector.html [ Skip ] # Timeout
 
 webkit.org/b/240349 inspector/timeline/timeline-event-screenshots.html [ Skip ]
 
-webkit.org/b/144690 editing/spelling/context-menu-suggestions-multiword-selection.html [ Timeout ]
-webkit.org/b/144690 editing/spelling/context-menu-suggestions-subword-selection.html [ Timeout ]
-webkit.org/b/144690 editing/spelling/spelling-exactly-selected-word.html [ Timeout ]
-webkit.org/b/144690 editing/spelling/spelling-with-punctuation-selection.html [ Timeout ]
-webkit.org/b/144690 editing/spelling/delete-into-misspelled-word.html [ Timeout ]
 
 
 webkit.org/b/156077 inspector/heap/getRemoteObject.html [ Skip ]

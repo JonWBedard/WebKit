@@ -106,7 +106,6 @@ webkit.org/b/193638 media/video-webkit-playsinline.html [ Failure ]
 # Crashing tests
 #////////////////////////////////////////////////////////////////////////////////////////
 
-webkit.org/b/156717 editing/spelling/spelling-changed-text.html [ Crash ]
 webkit.org/b/156717 fast/events/dropzone-005.html [ Crash ]
 webkit.org/b/156717 fast/events/keydown-numpad-keys.html [ Crash ]
 webkit.org/b/156717 fast/events/open-window-from-another-frame.html [ Crash ]

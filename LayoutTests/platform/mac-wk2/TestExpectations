@@ -213,9 +213,6 @@ editing/selection/doubleclick-whitespace.html
 editing/selection/drag-to-contenteditable-iframe.html
 editing/selection/mixed-editability-10.html
 editing/selection/select-out-of-editable.html
-editing/spelling/spellcheck-paste-continuous-disabled.html
-editing/spelling/spellcheck-paste-disabled.html
-editing/spelling/spellcheck-paste.html
 fast/dom/vertical-scrollbar-in-rtl.html
 fast/events/5056619.html
 fast/events/autoscroll-in-textfield.html
@@ -264,30 +261,9 @@ http/tests/security/drag-over-remote-content-iframe.html
 
 
 # [WK2] [Mac] Spellcheck tests don't seem to work
-webkit.org/b/105616 editing/spelling/context-menu-suggestions-multiword-selection.html
-webkit.org/b/105616 editing/spelling/context-menu-suggestions-subword-selection.html
-webkit.org/b/105616 editing/spelling/copy-paste-crash.html
-webkit.org/b/105616 editing/spelling/delete-into-misspelled-word.html
 webkit.org/b/105616 editing/spelling/editing-multiple-words-with-markers.html
-webkit.org/b/105616 editing/spelling/editing-word-with-marker-2.html
-webkit.org/b/105616 editing/spelling/move-cursor-around-misspelled-word.html
-webkit.org/b/105616 editing/spelling/spelling-changed-text.html
-webkit.org/b/105616 editing/spelling/spelling-backspace-between-lines.html
-webkit.org/b/105616 editing/spelling/design-mode-spellcheck-off.html
-webkit.org/b/105616 editing/spelling/spellcheck-attribute.html
-webkit.org/b/105616 editing/spelling/spelling-attribute-at-child.html
-webkit.org/b/105616 editing/spelling/spelling-attribute-change.html
-webkit.org/b/105616 editing/spelling/spelling-backward.html
-webkit.org/b/105616 editing/spelling/spelling-double-clicked-word.html
-webkit.org/b/105616 editing/spelling/spelling-exactly-selected-word.html
-webkit.org/b/105616 editing/spelling/spelling-hasspellingmarker.html
-webkit.org/b/105616 editing/spelling/spelling-linebreak.html
-webkit.org/b/105616 editing/spelling/spelling-with-punctuation-selection.html
-webkit.org/b/105616 editing/spelling/spelling-with-whitespace-selection.html
 webkit.org/b/105616 editing/spelling/grammar.html
 webkit.org/b/105616 editing/spelling/markers.html
-webkit.org/b/105616 editing/spelling/retro-correction-spelling-markers.html
-webkit.org/b/105616 editing/spelling/spelling-markers-after-pasting-sentence.html
 webkit.org/b/105616 editing/mac/spelling/autocorrection-delete.html [ Failure ]
 webkit.org/b/105616 editing/mac/spelling/autocorrection-removing-underline-after-paste.html [ Failure ]
 webkit.org/b/105616 editing/mac/spelling/autocorrection-removing-underline.html [ Failure ]
@@ -601,14 +577,9 @@ webkit.org/b/260640 [ Release arm64 ] editing/execCommand/apply-inline-style-to-
 ### START OF (2) Classified failures without bug reports (yet)
 
 # Missing TextChecker::requestCheckingOfString() implementation for Mac.
-editing/spelling/grammar-markers.html [ Skip ]
 editing/spelling/grammar-paste.html [ Skip ]
-editing/spelling/grammar-markers-hidpi.html [ Skip ]
-editing/spelling/inline-spelling-markers.html [ Skip ]
-editing/spelling/inline-spelling-markers-hidpi.html [ Skip ]
 editing/spelling/spellcheck-async-mutation.html [ Skip ]
 editing/spelling/spellcheck-async.html [ Skip ]
-editing/spelling/spellcheck-queue.html [ Skip ]
 editing/spelling/spelling-insert-html.html [ Skip ]
 
 ### END OF (2) Classified failures without bug reports (yet)

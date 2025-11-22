@@ -21,8 +21,8 @@
 </head>
 
 <body>
-<script src="../../resources/ui-helper.js"></script>
-<script src="../../resources/js-test.js"></script>
+<script src="../../../resources/ui-helper.js"></script>
+<script src="../../../resources/js-test.js"></script>
 LTR
 <div id="testLTR" class="testDiv" contenteditable="true"></div>
 RTL
@@ -51,6 +51,8 @@ if (window.internals) {
 function runTextCheckingTestFor(id)
 {
     var div = document.getElementById(id);
+    debug(div.id);
+
     div.focus();
     document.execCommand("InsertText", false, incorrectPhrase);
 
@@ -66,9 +68,12 @@ function verifyMarkers()
         return done();
 
     // Take care of spelling markers first.
-    shouldBecomeEqual('internals.hasSpellingMarker(8, 4)', 'true', function() { // Verifies 'adlj'.
-        shouldBecomeEqual('internals.hasSpellingMarker(13, 6)', 'true', function() { // Verifies 'adaasj'.
-            shouldBecomeEqual('internals.hasSpellingMarker(20, 5)', 'true', function() {  // Verifies 'sdklj'.
+    debug("Verifies 'adlj'.");
+    shouldBecomeEqual('internals.hasSpellingMarker(8, 4)', 'true', function() {
+        debug("Verifies 'adaasj'.");
+        shouldBecomeEqual('internals.hasSpellingMarker(13, 6)', 'true', function() {
+            debug("Verifies 'sdklj'.");
+            shouldBecomeEqual('internals.hasSpellingMarker(20, 5)', 'true', function() {
                 verifyGrammarMarkers();
             });
          });
@@ -76,8 +81,11 @@ function verifyMarkers()
 
     function verifyGrammarMarkers()
     {
-        shouldBecomeEqual('internals.hasGrammarMarker(4, 3)', 'true', function() { // Verifies duplicated 'the'.
-            shouldBecomeEqual('internals.hasGrammarMarker(33, 5)', 'true', function() { // Verifies duplicated 'there'.
+        debug("Verifies duplicated 'the'.");
+        shouldBecomeEqual('internals.hasGrammarMarker(4, 3)', 'true', function() {
+            debug("Verifies duplicated 'there'.");
+            shouldBecomeEqual('internals.hasGrammarMarker(33, 5)', 'true', function() {
+                debug("");
                 done();
             });
         });
@@ -100,29 +108,25 @@ function done()
     finishJSTest();
 }
 
-if (window.testRunner) {
-    testRunner.dumpAsText(true);
-    UIHelper.setSpellCheckerResults({
-        "the the adlj adaasj sdklj. there there\u00A0" : [
-            { type : "spelling", from : 8, to : 12 },
-            { type : "spelling", from : 13, to : 19 },
-            { type : "spelling", from : 20, to : 25 },
-            {
-                type : "grammar",
-                from : 4,
-                to : 7,
-                details : [{ from : 0, to : 3 }]
-            },
-            {
-                type : "grammar",
-                from : 33,
-                to : 38,
-                details : [{ from : 0, to : 5 }]
-            }
-        ]
-    }).then(() => testRunner.setBackingScaleFactor(2, done));
-}
-
+UIHelper.setSpellCheckerResults({
+    "the the adlj adaasj sdklj. there there\u00A0" : [
+        { type : "spelling", from : 8, to : 12 },
+        { type : "spelling", from : 13, to : 19 },
+        { type : "spelling", from : 20, to : 25 },
+        {
+            type : "grammar",
+            from : 4,
+            to : 7,
+            details : [{ from : 0, to : 3 }]
+        },
+        {
+            type : "grammar",
+            from : 33,
+            to : 38,
+            details : [{ from : 0, to : 5 }]
+        }
+    ]
+}).then(done);
 </script>
 </body>
 </html>
