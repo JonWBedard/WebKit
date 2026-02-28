@@ -1,0 +1,17 @@
+{
+    "prefix": "item",
+    "numbered": [
+        {
+            "id": 0,
+            "name": "item"
+        },
+        {
+            "id": 1,
+            "name": "item"
+        },
+        {
+            "id": 2,
+            "name": "item"
+        }
+    ]
+}

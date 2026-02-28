@@ -1,0 +1,7 @@
+{
+    "count": 3,
+    "start": 1,
+    "end": 5,
+    "rangeFromVariable": {"$eval": "range(0, count)"},
+    "rangeFromVariables": {"$eval": "range(start, end)"}
+}

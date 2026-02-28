@@ -1,0 +1,16 @@
+{
+    "ports": {
+        "http": 8080,
+        "https": 8443,
+        "admin": 9000
+    },
+    "services": {
+        "$map": {"$eval": "ports"},
+        "each(val, key)": {
+            "${key}": {
+                "service": {"$eval": "key"},
+                "port": {"$eval": "val"}
+            }
+        }
+    }
+}

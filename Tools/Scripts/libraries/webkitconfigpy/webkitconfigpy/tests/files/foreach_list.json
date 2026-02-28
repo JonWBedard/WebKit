@@ -1,0 +1,7 @@
+{
+    "items": ["apple", "banana", "cherry"],
+    "result": {
+        "$map": {"$eval": "items"},
+        "each(item)": {"name": {"$eval": "item"}}
+    }
+}

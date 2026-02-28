@@ -1,0 +1,12 @@
+{
+    "baseUrl": "https://api.example.com",
+    "endpoints": ["users", "posts", "comments"],
+    "apis": {
+        "$map": {"$eval": "endpoints"},
+        "each(item)": {
+            "endpoint": {"$eval": "item"},
+            "url": {"$eval": "baseUrl"},
+            "methods": ["GET", "POST"]
+        }
+    }
+}

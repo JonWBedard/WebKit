@@ -1,0 +1,15 @@
+environments:
+  - dev
+  - staging
+  - prod
+
+configs:
+  - name: dev
+    url: https://api.example.com
+    enabled: true
+  - name: staging
+    url: https://api.example.com
+    enabled: true
+  - name: prod
+    url: https://api.example.com
+    enabled: true

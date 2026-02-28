@@ -1,0 +1,14 @@
+{
+    "groups": ["group1", "group2"],
+    "numbers": [1, 2, 3],
+    "result": [
+        {
+            "group": "group1",
+            "items": [1, 2, 3]
+        },
+        {
+            "group": "group2",
+            "items": [1, 2, 3]
+        }
+    ]
+}

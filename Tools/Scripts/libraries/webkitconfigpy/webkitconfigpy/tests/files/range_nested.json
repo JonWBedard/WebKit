@@ -1,0 +1,10 @@
+{
+    "ports": {
+        "http": {"$eval": "range(8000, 8003)"},
+        "admin": {"$eval": "range(0, 3)"}
+    },
+    "ranges": [
+        {"$eval": "range(0, 2)"},
+        {"$eval": "range(5, 8)"}
+    ]
+}

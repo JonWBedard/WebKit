@@ -1,0 +1,3 @@
+{
+    "simpleRange": {"$eval": "range(0, 5)"}
+}

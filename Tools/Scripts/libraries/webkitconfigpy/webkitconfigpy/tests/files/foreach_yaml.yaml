@@ -1,0 +1,11 @@
+environments:
+  - dev
+  - staging
+  - prod
+
+configs:
+  $map: {$eval: environments}
+  each(item):
+    name: {$eval: item}
+    url: https://api.example.com
+    enabled: true

@@ -1,0 +1,21 @@
+{
+    "baseUrl": "https://api.example.com",
+    "endpoints": ["users", "posts", "comments"],
+    "apis": [
+        {
+            "endpoint": "users",
+            "url": "https://api.example.com",
+            "methods": ["GET", "POST"]
+        },
+        {
+            "endpoint": "posts",
+            "url": "https://api.example.com",
+            "methods": ["GET", "POST"]
+        },
+        {
+            "endpoint": "comments",
+            "url": "https://api.example.com",
+            "methods": ["GET", "POST"]
+        }
+    ]
+}

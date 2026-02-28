@@ -1,0 +1,9 @@
+{
+    "section1": {
+        "localVar": "secret",
+        "canAccess": {"$eval": "localVar"}
+    },
+    "section2": {
+        "cannotAccess": {"$eval": "localVar"}
+    }
+}

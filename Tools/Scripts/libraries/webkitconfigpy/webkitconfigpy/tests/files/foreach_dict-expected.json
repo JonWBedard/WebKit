@@ -1,0 +1,21 @@
+{
+    "ports": {
+        "http": 8080,
+        "https": 8443,
+        "admin": 9000
+    },
+    "services": {
+        "http": {
+            "service": "http",
+            "port": 8080
+        },
+        "https": {
+            "service": "https",
+            "port": 8443
+        },
+        "admin": {
+            "service": "admin",
+            "port": 9000
+        }
+    }
+}

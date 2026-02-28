@@ -1,0 +1,14 @@
+{
+    "groups": ["group1", "group2"],
+    "numbers": [1, 2, 3],
+    "result": {
+        "$map": {"$eval": "groups"},
+        "each(group)": {
+            "group": {"$eval": "group"},
+            "items": {
+                "$map": {"$eval": "numbers"},
+                "each(item)": {"$eval": "item"}
+            }
+        }
+    }
+}

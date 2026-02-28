@@ -1,0 +1,8 @@
+{
+    "items": ["apple", "banana", "cherry"],
+    "result": [
+        {"name": "apple"},
+        {"name": "banana"},
+        {"name": "cherry"}
+    ]
+}

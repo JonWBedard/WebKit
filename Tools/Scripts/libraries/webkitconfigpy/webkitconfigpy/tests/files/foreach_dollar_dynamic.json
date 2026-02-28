@@ -1,0 +1,7 @@
+{
+    "items": ["apple", "banana", "cherry"],
+    "result": {
+        "$foreach": {"$_": "items"},
+        "in": {"name": {"$_": "i"}}
+    }
+}

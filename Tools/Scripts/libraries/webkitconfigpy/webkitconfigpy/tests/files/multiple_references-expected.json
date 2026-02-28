@@ -1,0 +1,15 @@
+{
+    "environment": "production",
+    "region": "us-west-2",
+    "baseUrl": "https://api.example.com",
+    "services": {
+        "auth": {
+            "endpoint": "https://api.example.com",
+            "region": "us-west-2"
+        },
+        "storage": {
+            "endpoint": "https://api.example.com",
+            "env": "production"
+        }
+    }
+}

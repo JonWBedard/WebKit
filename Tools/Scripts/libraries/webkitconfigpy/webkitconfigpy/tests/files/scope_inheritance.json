@@ -1,0 +1,12 @@
+{
+    "parentVar": "parent_value",
+    "nested": {
+        "childVar": "child_value",
+        "canAccessParent": {"$eval": "parentVar"},
+        "canAccessSelf": {"$eval": "childVar"}
+    },
+    "sibling": {
+        "canAccessParent": {"$eval": "parentVar"},
+        "cannotAccessChild": {"$eval": "childVar"}
+    }
+}

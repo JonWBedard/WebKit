@@ -1,0 +1,10 @@
+{
+    "prefix": "item",
+    "numbered": {
+        "$map": {"$eval": "range(0, 3)"},
+        "each(item)": {
+            "id": {"$eval": "item"},
+            "name": {"$eval": "prefix"}
+        }
+    }
+}

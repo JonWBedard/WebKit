@@ -1,0 +1,7 @@
+{
+    "config": {"host": "localhost", "port": 8080},
+    "result": [
+        {"k": "host", "v": "localhost"},
+        {"k": "port", "v": 8080}
+    ]
+}
