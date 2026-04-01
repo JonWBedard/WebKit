@@ -41,9 +41,43 @@
 #import <WebKit/WKWebViewConfigurationPrivate.h>
 #import <WebKit/WKWebViewPrivate.h>
 #import <WebKit/WKWebViewPrivateForTesting.h>
+#import <wtf/Function.h>
 #import <wtf/RetainPtr.h>
 
 #if ENABLE(CONTENT_INSET_BACKGROUND_FILL)
+
+@interface FixedContentColorObserver : NSObject
+- (instancetype)initWithWebView:(WKWebView *)webView callback:(Function<void()>&&)callback;
+@end
+
+@implementation FixedContentColorObserver {
+    RetainPtr<NSObject> _observable;
+    Function<void()> _callback;
+}
+
+- (instancetype)initWithWebView:(WKWebView *)webView callback:(Function<void()>&&)callback
+{
+    if (!(self = [super init]))
+        return nil;
+
+    _observable = webView;
+    _callback = WTF::move(callback);
+    [_observable addObserver:self forKeyPath:@"_sampledTopFixedPositionContentColor" options:0 context:nil];
+    return self;
+}
+
+- (void)dealloc
+{
+    [_observable removeObserver:self forKeyPath:@"_sampledTopFixedPositionContentColor" context:nullptr];
+    [super dealloc];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    _callback();
+}
+
+@end
 
 @interface TopScrollPocketObserver : NSObject
 @property (nonatomic, readonly) NSUInteger changeCount;
@@ -444,7 +478,16 @@ TEST(ObscuredContentInsets, TopOverhangColorExtensionLayerAppearsImmediatelyAfte
     [webView setObscuredContentInsets:NSEdgeInsetsMake(100, 0, 0, 0)];
     [webView waitForNextPresentationUpdate];
 
-    [webView synchronouslyLoadTestPageNamed:@"top-fixed-element"];
+    {
+        bool colorArrived = false;
+        RetainPtr observer = adoptNS([[FixedContentColorObserver alloc] initWithWebView:webView.get() callback:[&] {
+            colorArrived = true;
+        }]);
+
+        [webView synchronouslyLoadTestPageNamed:@"top-fixed-element"];
+        Util::run(&colorArrived);
+    }
+
     [webView waitForNextPresentationUpdate];
 
     RetainPtr layerBeforeReload = [webView firstLayerWithNameContaining:@"top overhang"];
@@ -456,17 +499,21 @@ TEST(ObscuredContentInsets, TopOverhangColorExtensionLayerAppearsImmediatelyAfte
     RetainPtr actualColorBeforeReload = [NSColor colorWithCGColor:[layerBeforeReload backgroundColor]];
     EXPECT_TRUE(Util::compareColors(actualColorBeforeReload, expectedColor.get()));
 
-    __block bool layerChecked = false;
-    RetainPtr navigationDelegate = adoptNS([[TestNavigationDelegate alloc] init]);
-    [navigationDelegate setDidCommitNavigation:^(WKWebView *view, WKNavigation *) {
-        [view _doAfterNextPresentationUpdate:^{
-            layerChecked = true;
+    {
+        __block bool navigationCommitted = false;
+        RetainPtr navigationDelegate = adoptNS([[TestNavigationDelegate alloc] init]);
+        [navigationDelegate setDidCommitNavigation:^(WKWebView *view, WKNavigation *) {
+            [view _doAfterNextPresentationUpdate:^{
+                navigationCommitted = true;
+            }];
         }];
-    }];
-    [webView setNavigationDelegate:navigationDelegate.get()];
+        [webView setNavigationDelegate:navigationDelegate.get()];
 
-    [webView reload];
-    Util::run(&layerChecked);
+        [webView reload];
+        Util::run(&navigationCommitted);
+    }
+
+    [webView waitForNextPresentationUpdate];
 
     RetainPtr layerAfterReload = [webView firstLayerWithNameContaining:@"top overhang"];
     EXPECT_NOT_NULL(layerAfterReload.get());
@@ -484,7 +531,16 @@ TEST(ObscuredContentInsets, TopOverhangColorExtensionLayerRemovedQuicklyAfterNav
     [webView setObscuredContentInsets:NSEdgeInsetsMake(100, 0, 0, 0)];
     [webView waitForNextPresentationUpdate];
 
-    [webView synchronouslyLoadTestPageNamed:@"top-fixed-element"];
+    {
+        bool colorArrived = false;
+        RetainPtr observer = adoptNS([[FixedContentColorObserver alloc] initWithWebView:webView.get() callback:[&] {
+            colorArrived = true;
+        }]);
+
+        [webView synchronouslyLoadTestPageNamed:@"top-fixed-element"];
+        Util::run(&colorArrived);
+    }
+
     [webView waitForNextPresentationUpdate];
 
     EXPECT_NOT_NULL([webView firstLayerWithNameContaining:@"top overhang"]);
