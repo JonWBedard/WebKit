@@ -461,8 +461,12 @@ void MediaSessionManagerInterface::sessionWillBeginPlayback(PlatformMediaSession
         return;
     }
 
-    if (m_currentInterruption)
+    if (m_currentInterruption) {
         endInterruption(PlatformMediaSession::EndInterruptionFlags::NoFlags);
+#if USE(AUDIO_SESSION)
+        AudioSession::singleton().endInterruption(AudioSession::MayResume::Yes);
+#endif
+    }
 
     if (restrictions.contains(MediaSessionRestriction::ConcurrentPlaybackNotPermitted)) {
         forEachMatchingSession([&session](auto& otherSession) {
