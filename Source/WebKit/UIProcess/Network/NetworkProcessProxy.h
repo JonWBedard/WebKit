@@ -389,7 +389,8 @@ private:
     void didReceiveSyncMessage(IPC::Connection&, IPC::Decoder&, UniqueRef<IPC::Encoder>&) override;
     void didClose(IPC::Connection&) override;
     void didReceiveInvalidMessage(IPC::Connection&, IPC::MessageName, const Vector<uint32_t>& indicesOfObjectsFailingDecoding) override;
-    // Note: uses dispatchMessage, dispatchSyncMessage from superclass.
+    // Note: uses dispatchSyncMessage from superclass.
+    bool dispatchMessage(IPC::Connection&, IPC::Decoder&);
 
     // ResponsivenessTimer::Client
     void didBecomeUnresponsive() final;

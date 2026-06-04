@@ -66,6 +66,7 @@
 #include "ViewSnapshotStore.h"
 #include "WebCompiledContentRuleList.h"
 #include "WebFrameProxy.h"
+#include "WebFrameProxyMessages.h"
 #include "WebNotificationManagerProxy.h"
 #include "WebPageMessages.h"
 #include "WebPageProxy.h"
@@ -2120,6 +2121,20 @@ void NetworkProcessProxy::installMockParentalControlsURLFilterForTesting(Vector<
 void NetworkProcessProxy::flushNetworkProcessIPC(CompletionHandler<void()>&& completionHandler)
 {
     sendWithAsyncReply(Messages::NetworkProcess::FlushNetworkProcessIPC(), WTF::move(completionHandler));
+}
+
+bool NetworkProcessProxy::dispatchMessage(IPC::Connection& connection, IPC::Decoder& decoder)
+{
+    if (AuxiliaryProcessProxy::dispatchMessage(connection, decoder))
+        return true;
+    if (decoder.messageReceiverName() == Messages::WebFrameProxy::messageReceiverName()) {
+        if (RefPtr frame = FrameIdentifier::isValidIdentifier(decoder.destinationID()) ? WebFrameProxy::webFrame(FrameIdentifier(decoder.destinationID())) : nullptr)
+            frame->didReceiveMessage(connection, decoder);
+        else
+            WebFrameProxy::sendCancelReply(connection, decoder);
+        return true;
+    }
+    return false;
 }
 
 } // namespace WebKit

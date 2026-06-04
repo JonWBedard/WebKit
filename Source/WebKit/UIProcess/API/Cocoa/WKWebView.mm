@@ -5238,10 +5238,7 @@ static void convertAndAddHighlight(Vector<Ref<WebCore::SharedMemory>>& buffers, 
 
 - (NSArray *)_certificateChain
 {
-    if (RefPtr mainFrame = _page->mainFrame())
-        return (__bridge NSArray *)WebCore::CertificateInfo::certificateChainFromSecTrust(mainFrame->certificateInfo().trust().get()).autorelease();
-
-    return nil;
+    return (__bridge NSArray *)WebCore::CertificateInfo::certificateChainFromSecTrust(_page->pageLoadState().certificateInfo().trust().get()).autorelease() ?: @[ ];
 }
 
 - (NSURL *)_committedURL
@@ -7668,7 +7665,7 @@ static NSString *nameForAction(_WKTextExtractionAction action)
 
 - (NSArray *)certificateChain
 {
-    return (__bridge NSArray *)WebCore::CertificateInfo::certificateChainFromSecTrust(_page->pageLoadState().certificateInfo().trust().get()).autorelease() ?: @[ ];
+    return (__bridge NSArray *)WebCore::CertificateInfo::certificateChainFromSecTrust([self serverTrust]).autorelease() ?: @[];
 }
 
 @end
