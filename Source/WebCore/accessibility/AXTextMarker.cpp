@@ -1581,6 +1581,18 @@ AXTextMarker AXTextMarker::findLine(AXDirection direction, AXTextUnitBoundary bo
             if ((currentObject->role() == AccessibilityRole::LineBreak && includeTrailingLineBreak == IncludeTrailingLineBreak::No)
                 || offsetOfCollapsedTrailingNewline(*currentObject, nextRuns) == std::optional<unsigned> { 0 })
                 break;
+
+            if (direction == AXDirection::Next && boundary == AXTextUnitBoundary::End
+                && currentObject->role() == AccessibilityRole::LineBreak && nextRuns
+                && nextRuns->containingBlock != currentRuns->containingBlock) {
+                // A <br> terminates the line the content before it sits on, so it belongs to the line
+                // being measured even though its lineID (containing block + line index) differs:
+                //   <div>First line<br><button>butto|n</button><br>Third line</div>
+                // The button's text lays out in its own block, the <br> in the <div>. Line indices
+                // within one block still rule, so a <br> starting a blank line isn't pulled in.
+                return { *currentObject, nextRuns->totalLength(), origin };
+            }
+
             currentRuns = nextRuns;
             // Reset the runIndex to 0 or the maximum, since we should start iterating from the very beginning/end of the next object's runs, depending on the direction.
             runIndex = direction == AXDirection::Next ? 0 : currentRuns->size() - 1;
