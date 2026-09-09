@@ -143,9 +143,7 @@ struct WebPageTests {
 
             // The 2-QWAC is fetched after the navigation commits, so waiting for the navigation to finish
             // is not enough; this waits for the property to be observed changing.
-            for try await change in changes where change {
-                break
-            }
+            _ = try await #require(changes.first { @Sendable in $0 })
 
             let qualifiedServerTrust = try #require(page.qualifiedServerTrust)
             let serverTrust = try #require(page.serverTrust)

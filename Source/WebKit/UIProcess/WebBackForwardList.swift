@@ -183,11 +183,7 @@ final class WebBackForwardList {
         backForwardLog("(Back/Forward) WebBackForwardList \(ObjectIdentifier(self)) had its page closed with current size \(entries.count)")
 
         // We should have always started out with an m_page and we should never close the page twice
-        #if compiler(>=6.4) && !SWIFT_WEBKIT_TOOLCHAIN
-        let pageAvailable = Bool(fromCxx: page)
-        #else
         let pageAvailable = page.__convertToBool()
-        #endif
         assert(pageAvailable)
         if pageAvailable {
             for item in entries {
@@ -352,17 +348,11 @@ final class WebBackForwardList {
     func currentItem() -> WebKit.WebBackForwardListItem? {
         assertValidIndex()
 
-        #if compiler(>=6.4) && !SWIFT_WEBKIT_TOOLCHAIN
-        guard Bool(fromCxx: page) else {
-            return nil
-        }
-        #else
         guard page.__convertToBool() else {
             return nil
         }
-        #endif
 
-        guard let currentIndex else {
+        guard let currentIndex = currentIndex else {
             return nil
         }
 
@@ -373,17 +363,11 @@ final class WebBackForwardList {
     func backItem() -> WebKit.WebBackForwardListItem? {
         assertValidIndex()
 
-        #if compiler(>=6.4) && !SWIFT_WEBKIT_TOOLCHAIN
-        guard Bool(fromCxx: page) else {
-            return nil
-        }
-        #else
         guard page.__convertToBool() else {
             return nil
         }
-        #endif
 
-        guard let currentIndex else {
+        guard let currentIndex = currentIndex else {
             return nil
         }
 
@@ -401,17 +385,11 @@ final class WebBackForwardList {
     func forwardItem() -> WebKit.WebBackForwardListItem? {
         assertValidIndex()
 
-        #if compiler(>=6.4) && !SWIFT_WEBKIT_TOOLCHAIN
-        guard Bool(fromCxx: page) else {
-            return nil
-        }
-        #else
         guard page.__convertToBool() else {
             return nil
         }
-        #endif
 
-        guard let currentIndex else {
+        guard let currentIndex = currentIndex else {
             return nil
         }
 
@@ -422,7 +400,6 @@ final class WebBackForwardList {
         guard currentIndex < entries.count - 1 else {
             return nil
         }
-
         return entries[currentIndex + 1]
     }
 
@@ -430,17 +407,11 @@ final class WebBackForwardList {
     func itemAtDeltaFromCurrentIndex(delta: Int, allowSkipping: Bool = true) -> WebKit.WebBackForwardListItem? {
         assertValidIndex()
 
-        #if compiler(>=6.4) && !SWIFT_WEBKIT_TOOLCHAIN
-        guard Bool(fromCxx: page) else {
-            return nil
-        }
-        #else
         guard page.__convertToBool() else {
             return nil
         }
-        #endif
 
-        guard let currentIndex else {
+        guard let currentIndex = currentIndex else {
             return nil
         }
 
@@ -474,15 +445,9 @@ final class WebBackForwardList {
     }
 
     func itemAtIndexWithoutSkipping(index: Int) -> (item: WebKit.WebBackForwardListItem?, index: Int) {
-        #if compiler(>=6.4) && !SWIFT_WEBKIT_TOOLCHAIN
-        guard Bool(fromCxx: page) else {
-            return (nil, index)
-        }
-        #else
         guard page.__convertToBool() else {
             return (nil, index)
         }
-        #endif
 
         if index < 0 || index >= entries.count {
             return (nil, index)
@@ -494,17 +459,11 @@ final class WebBackForwardList {
     private func rawBackListEntryCount() -> Int {
         assertValidIndex()
 
-        #if compiler(>=6.4) && !SWIFT_WEBKIT_TOOLCHAIN
-        guard Bool(fromCxx: page) else {
-            return 0
-        }
-        #else
         guard page.__convertToBool() else {
             return 0
         }
-        #endif
 
-        guard let currentIndex else {
+        guard let currentIndex = currentIndex else {
             return 0
         }
 
@@ -514,15 +473,9 @@ final class WebBackForwardList {
     private func rawForwardListEntryCount() -> Int {
         assertValidIndex()
 
-        #if compiler(>=6.4) && !SWIFT_WEBKIT_TOOLCHAIN
-        guard Bool(fromCxx: page) else {
-            return 0
-        }
-        #else
         guard page.__convertToBool() else {
             return 0
         }
-        #endif
 
         guard let currentIndex = currentIndex else {
             return 0
@@ -531,14 +484,19 @@ final class WebBackForwardList {
         return entries.count - (currentIndex + 1)
     }
 
+    private enum MakeAPIArray {
+        case no
+        case yes
+    }
+
     @used
     func backListCountForAPI() -> Int {
-        backListWithLimitInternal(limit: UInt(rawBackListEntryCount()), makeAPIArray: false).count
+        backListWithLimitInternal(limit: UInt(rawBackListEntryCount()), makeAPIArray: .no).count
     }
 
     @used
     func forwardListCountForAPI() -> Int {
-        forwardListWithLimitInternal(limit: UInt(rawForwardListEntryCount()), makeAPIArray: false).count
+        forwardListWithLimitInternal(limit: UInt(rawForwardListEntryCount()), makeAPIArray: .no).count
     }
 
     private func rawCounts() -> WebKit.WebBackForwardListCounts {
@@ -547,10 +505,10 @@ final class WebBackForwardList {
 
     private static func makeListPairResult(
         items: [WebKit.WebBackForwardListItem],
-        makeAPIArray: Bool
+        makeAPIArray: MakeAPIArray
     ) -> (count: Int, array: API.RefAPIArray?) {
         let count = items.count
-        guard makeAPIArray else {
+        guard makeAPIArray == .yes else {
             return (count: count, array: nil)
         }
         let array = count > 0 ? API.Array.create(list: items.map { WebKit.toAPIObject($0) }) : API.Array.create()
@@ -560,27 +518,21 @@ final class WebBackForwardList {
     @used
     func backListAsAPIArrayWithLimit(limit: UInt) -> API.RefAPIArray {
         // swift-format-ignore: NeverForceUnwrap
-        backListWithLimitInternal(limit: limit, makeAPIArray: true).array!
+        backListWithLimitInternal(limit: limit, makeAPIArray: .yes).array!
     }
 
     @used
     func forwardListAsAPIArrayWithLimit(limit: UInt) -> API.RefAPIArray {
         // swift-format-ignore: NeverForceUnwrap
-        forwardListWithLimitInternal(limit: limit, makeAPIArray: true).array!
+        forwardListWithLimitInternal(limit: limit, makeAPIArray: .yes).array!
     }
 
-    private func backListWithLimitInternal(limit: UInt, makeAPIArray: Bool) -> (count: Int, array: API.RefAPIArray?) {
+    private func backListWithLimitInternal(limit: UInt, makeAPIArray: MakeAPIArray) -> (count: Int, array: API.RefAPIArray?) {
         assertValidIndex()
 
-        #if compiler(>=6.4) && !SWIFT_WEBKIT_TOOLCHAIN
-        guard Bool(fromCxx: page) else {
-            return WebBackForwardList.makeListPairResult(items: [], makeAPIArray: makeAPIArray)
-        }
-        #else
         guard page.__convertToBool() else {
             return WebBackForwardList.makeListPairResult(items: [], makeAPIArray: makeAPIArray)
         }
-        #endif
 
         guard let unwrappedCurrentIndex = currentIndex else {
             return WebBackForwardList.makeListPairResult(items: [], makeAPIArray: makeAPIArray)
@@ -619,18 +571,12 @@ final class WebBackForwardList {
         return WebBackForwardList.makeListPairResult(items: backItems, makeAPIArray: makeAPIArray)
     }
 
-    private func forwardListWithLimitInternal(limit: UInt, makeAPIArray: Bool) -> (count: Int, array: API.RefAPIArray?) {
+    private func forwardListWithLimitInternal(limit: UInt, makeAPIArray: MakeAPIArray) -> (count: Int, array: API.RefAPIArray?) {
         assertValidIndex()
 
-        #if compiler(>=6.4) && !SWIFT_WEBKIT_TOOLCHAIN
-        guard Bool(fromCxx: page) else {
-            return WebBackForwardList.makeListPairResult(items: [], makeAPIArray: makeAPIArray)
-        }
-        #else
         guard page.__convertToBool() else {
             return WebBackForwardList.makeListPairResult(items: [], makeAPIArray: makeAPIArray)
         }
-        #endif
 
         guard let unwrappedCurrentIndex = currentIndex else {
             return WebBackForwardList.makeListPairResult(items: [], makeAPIArray: makeAPIArray)
@@ -728,8 +674,8 @@ final class WebBackForwardList {
     func backForwardListState(filter: WebBackForwardListItemFilter) -> WebKit.BackForwardListState {
         assertValidIndex()
 
-        var backForwardListState = WebKit.BackForwardListState()
-        if let currentIndex {
+        var backForwardListState = WebKit.BackForwardListState.init()
+        if let currentIndex = currentIndex {
             setOptionalUInt32Value(&backForwardListState.currentIndex, UInt32(currentIndex))
         }
 
@@ -921,7 +867,7 @@ final class WebBackForwardList {
 
     @used
     func goBackItemSkippingItemsWithoutUserGesture() -> WebKit.RefPtrWebBackForwardListItem {
-        guard let currentIndex else {
+        guard let currentIndex = currentIndex else {
             return WebKit.RefPtrWebBackForwardListItem()
         }
         if currentIndex == 0 {
@@ -934,7 +880,7 @@ final class WebBackForwardList {
 
     @used
     func goForwardItemSkippingItemsWithoutUserGesture() -> WebKit.RefPtrWebBackForwardListItem {
-        guard let currentIndex else {
+        guard let currentIndex = currentIndex else {
             return WebKit.RefPtrWebBackForwardListItem()
         }
         if currentIndex >= entries.count {
@@ -1077,24 +1023,17 @@ final class WebBackForwardList {
     ) {
         let process = WebKit.WebProcessProxy.fromConnection(connection)
 
-        #if compiler(>=6.4) && !SWIFT_WEBKIT_TOOLCHAIN
-        let hasItemID = Bool(fromCxx: navigatedFrameState.ptr().itemID)
-        let hasFrameItemID = Bool(fromCxx: navigatedFrameState.ptr().frameItemID)
-        #else
-        let hasItemID = navigatedFrameState.ptr().itemID.__convertToBool()
-        let hasFrameItemID = navigatedFrameState.ptr().frameItemID.__convertToBool()
-        #endif
-
+        // __convertToBool necessary due to rdar://137879510
         if messageCheck(
             process: process,
-            !hasItemID || contentsMatch(navigatedFrameState.ptr().itemID.pointee.processIdentifier(), process.ptr().coreProcessIdentifier())
+            !navigatedFrameState.ptr().itemID.__convertToBool()
+                || contentsMatch(navigatedFrameState.ptr().itemID.pointee.processIdentifier(), process.ptr().coreProcessIdentifier())
         ) {
             return
         }
-
         if messageCheck(
             process: process,
-            !hasFrameItemID
+            !navigatedFrameState.ptr().frameItemID.__convertToBool()
                 || contentsMatch(navigatedFrameState.ptr().frameItemID.pointee.processIdentifier(), process.ptr().coreProcessIdentifier())
         ) {
             return
@@ -1120,7 +1059,6 @@ final class WebBackForwardList {
         } else {
             pagesMatch = framePage == nil && listPage == nil
         }
-
         if messageCheck(process: process, pagesMatch) {
             return
         }
@@ -1214,18 +1152,10 @@ final class WebBackForwardList {
             }
         }
 
-        #if compiler(>=6.4) && !SWIFT_WEBKIT_TOOLCHAIN
-        let hasItemID = Bool(fromCxx: frameState.ptr().itemID)
-        let hasFrameItemID = Bool(fromCxx: frameState.ptr().frameItemID)
-        #else
-        let hasItemID = frameState.ptr().itemID.__convertToBool()
-        let hasFrameItemID = frameState.ptr().frameItemID.__convertToBool()
-        #endif
-
-        guard hasItemID && hasFrameItemID else {
+        // __convertToBool necessary due to rdar://137879510
+        if !frameState.ptr().itemID.__convertToBool() || !frameState.ptr().frameItemID.__convertToBool() {
             return
         }
-
         let itemID = frameState.ptr().itemID.pointee
         let frameItemID = frameState.ptr().frameItemID.pointee
         guard let frameItem = WebKit.WebBackForwardListFrameItem.itemForID(itemID, frameItemID) else {
@@ -1237,7 +1167,6 @@ final class WebBackForwardList {
         guard let webPageProxy = page.get() else {
             return
         }
-
         // We can't use == here due to rdar://162357139
         if messageCheck(
             process: process,

@@ -29,9 +29,9 @@ import WebKit_Private
 @_spiOnly public import UIIntelligenceSupport
 
 #if WTF_PLATFORM_IOS_FAMILY
-@_spi(UIIntelligenceSupport) import UIKit
+@_spi(UIIntelligenceSupport) public import UIKit
 #else
-@_spi(UIIntelligenceSupport) import AppKit
+@_spi(UIIntelligenceSupport) public import AppKit
 #endif
 
 private func createEditable(for editable: WKTextExtractionEditable?) -> IntelligenceElement.Text.Editable? {
