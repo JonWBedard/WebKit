@@ -161,6 +161,29 @@ class TestGit(testing.PathTestCase):
                 }, local.Git(self.path).info(),
             )
 
+    def test_commit_cached_hash_leaves_default_branch_without_identifier(self):
+        with mocks.local.Git(self.path) as mock, MockTime, LoggerCapture():
+            # 5@main was committed on main, but never pushed, and no other branch contains it
+            mock.remotes['origin/main'].pop()
+            del mock.commits['eng/squash-branch']
+            repository = local.Git(self.path)
+            repository.cache.populate(branch='main')
+            self.assertEqual('5@main', str(repository.commit(hash='d8bce26fa65c')))
+
+            # Equivalent to `git branch eng/rewritten && git reset --hard origin/main`
+            unpushed = mock.commits['main'].pop()
+            mock.commits['eng/rewritten'] = [
+                mock.commits['main'][-1],
+                Commit(
+                    hash=unpushed.hash, branch='eng/rewritten', identifier='4.1@eng/rewritten',
+                    timestamp=unpushed.timestamp, author=unpushed.author, message=unpushed.message,
+                ),
+            ]
+            mock.head = mock.commits['main'][-1]
+
+            self.assertEqual('4.1@eng/rewritten', str(local.Git(self.path, cached=False).commit(hash='d8bce26fa65c')))
+            self.assertEqual('eng/rewritten', repository.commit(hash='d8bce26fa65c', include_identifier=False).branch)
+
     def test_commit_revision(self):
         with mocks.local.Git(self.path), MockTime, LoggerCapture():
             with self.assertRaises(local.Git.Exception):
